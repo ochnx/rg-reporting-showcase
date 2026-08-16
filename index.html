@@ -1,34 +1,11 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="referrer" content="no-referrer"><title>Run & Gun | Reporting Dashboard</title>
-  <link rel="icon" href="assets/rg-logo.png"><link rel="stylesheet" href="styles.css">
-  <script src="assets/chart.umd.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Run & Gun — Reporting Dashboard</title>
+  <script>location.replace('client/' + location.search + location.hash);</script>
 </head>
-<body data-page="viewer">
-  <header class="topnav">
-    <div class="brand"><img src="assets/rg-logo.png" alt="Run & Gun"><span>Reporting Dashboard</span></div>
-    <div class="nav-actions"><select id="caseSelect" aria-label="Reporting Case"></select></div>
-  </header>
-  <main class="shell" id="dashboard">
-    <section class="intro"><div><span class="eyebrow">Performance Marketing</span><h1 id="caseTitle">Reporting Dashboard</h1><p id="caseMeta"></p></div><span class="status"><i></i> Kampagne aktiv</span></section>
-    <section class="hero-grid">
-      <article class="hero-card"><span>Werbebudget</span><strong id="spend">–</strong><small id="period">–</small></article>
-      <article class="hero-card"><span>Generierte Leads</span><strong id="leads">–</strong><small id="leadTrend">Täglicher Verlauf</small></article>
-    </section>
-    <section class="mini-grid">
-      <article><span>Ø CPL</span><strong id="cpl">–</strong></article>
-      <article><span>Impressionen</span><strong id="impressions">–</strong></article>
-      <article><span>Klicks</span><strong id="clicks">–</strong></article>
-      <article><span>CTR</span><strong id="ctr">–</strong></article>
-    </section>
-    <section class="panel chart-panel"><div class="panel-head"><div><h2>Performance-Verlauf</h2><p>Tägliche Kampagnenperformance</p></div><div class="legend"><span class="red-dot"></span>Leads <span class="dark-dot"></span>Spend</div></div><div class="chart-wrap"><canvas id="performanceChart"></canvas></div></section>
-    <section class="split">
-      <article class="panel"><div class="panel-head"><div><h2>Kampagnen</h2><p>Performance nach Flight</p></div></div><div id="campaignList" class="campaign-list"></div></article>
-      <article class="panel"><div class="panel-head"><div><h2>Objekt</h2><p>Kampagnenübersicht</p></div></div><dl class="property-list"><div><dt>Objekt</dt><dd id="propertyName">–</dd></div><div><dt>Standort</dt><dd id="propertyLocation">–</dd></div><div><dt>Zeitraum</dt><dd id="propertyPeriod">–</dd></div></dl></article>
-    </section>
-    <footer>Run & Gun · Reporting Dashboard</footer>
-  </main>
-  <script src="app.js"></script>
-</body></html>
+<body></body>
+</html>
