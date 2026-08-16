@@ -4,13 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://*.supabase.co; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
   <title>Run & Gun — Reporting Dashboard</title>
   <link rel="icon" type="image/png" href="../assets/rg-logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="../assets/chart.umd.min.js"></script>
+  <script src="../backend-config.js"></script>
+  <script src="../shared/supabase-api.js"></script>
   <script src="demo-payload.js"></script>
   <style>
     :root {
@@ -2817,7 +2819,16 @@ async function buildGermanySVGFromGeoJSON() {
 // SCOPED CLIENT REPORTING API
 // ============================================
 async function fetchClientDashboard(token) {
-  return window.createDemoDashboardPayload();
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get('case');
+  if (!slug) return window.createDemoDashboardPayload();
+
+  const config = window.REPORTING_BACKEND || {};
+  if (!config.url || !config.key) throw new Error('Backend ist nicht konfiguriert');
+  const api = window.ReportingSupabaseApi.createReportingApi(config);
+  const payload = await api.getPublishedCase(slug);
+  if (!payload) throw new Error('Case wurde nicht gefunden oder ist nicht veröffentlicht');
+  return payload;
 }
 
 // ============================================
@@ -3613,7 +3624,7 @@ function buildFlightRow(flight, index) {
   row.onclick = function(event) { event.stopPropagation(); openDetail(flight.id); };
   row.innerHTML =
     '<div class="campaign-item-left">' +
-      '<div class="campaign-item-name campaign-subitem-name">Schaltung ' + (flight.flight_no || index + 1) + '</div>' +
+      '<div class="campaign-item-name campaign-subitem-name">Schaltung ' + escHtml(String(flight.flight_no || index + 1)) + '</div>' +
       '<div class="campaign-item-meta"><span>' + formatDateRange(dates[0] || flight.start_date, dates[dates.length - 1] || flight.end_date) + '</span>' +
       '<span>' + new Set(dates).size + ' Tage</span></div>' +
     '</div>' +

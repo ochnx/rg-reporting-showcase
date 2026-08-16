@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Run & Gun | Reporting Setup</title>
+  <link rel="icon" href="assets/rg-logo.png">
+  <link rel="stylesheet" href="editor.css">
+</head>
+<body>
+  <section id="loginView" class="login-view">
+    <form id="loginForm" class="login-card">
+      <img src="assets/rg-logo.png" alt="Run & Gun">
+      <span class="eyebrow">Reporting Setup</span>
+      <h1>Cases einrichten</h1>
+      <p>Melde dich mit deinem freigeschalteten Account an.</p>
+      <label>E-Mail<input name="email" type="email" autocomplete="username" required></label>
+      <label>Passwort<input name="password" type="password" autocomplete="current-password" required></label>
+      <button class="button primary" type="submit">Anmelden</button>
+      <div id="loginError" class="message error" role="alert"></div>
+    </form>
+  </section>
+
+  <section id="inviteView" class="login-view" hidden>
+    <form id="inviteForm" class="login-card">
+      <img src="assets/rg-logo.png" alt="Run & Gun">
+      <span class="eyebrow">Account aktivieren</span>
+      <h1>Passwort festlegen</h1>
+      <p>Mindestens 12 Zeichen, Groß- und Kleinbuchstaben, Zahl und Sonderzeichen.</p>
+      <label>Neues Passwort<input id="invitePassword" name="password" type="password" autocomplete="new-password" minlength="12" required></label>
+      <label>Passwort wiederholen<input name="passwordConfirm" type="password" autocomplete="new-password" minlength="12" required></label>
+      <button class="button primary" type="submit">Account aktivieren</button>
+      <div id="inviteError" class="message error" role="alert"></div>
+    </form>
+  </section>
+
+  <div id="workspace" hidden>
+    <header class="topbar">
+      <div class="brand"><img src="assets/rg-logo.png" alt="Run & Gun"><div><strong>Reporting Setup</strong><small>Synthetische Pitch-Cases</small></div></div>
+      <div class="top-actions"><span id="accountLabel"></span><button id="logoutButton" class="button ghost" type="button">Abmelden</button></div>
+    </header>
+
+    <main class="workspace">
+      <aside class="sidebar panel">
+        <div class="sidebar-head"><div><span class="eyebrow">Bibliothek</span><h2>Cases</h2></div><button id="newCase" class="icon-button" type="button" aria-label="Neuer Case">+</button></div>
+        <div id="caseList" class="case-list"></div>
+      </aside>
+
+      <form id="caseForm" class="editor">
+        <div class="editor-head">
+          <div><span class="eyebrow">Case Editor</span><h1 id="editorTitle">Neuer Case</h1><p id="saveState">Noch nicht gespeichert</p></div>
+          <div class="editor-actions">
+            <button id="duplicateCase" class="button ghost" type="button">Duplizieren</button>
+            <button id="openViewer" class="button ghost" type="button">Viewer öffnen</button>
+            <button id="saveCase" class="button primary" type="submit">Speichern</button>
+          </div>
+        </div>
+
+        <section class="panel section">
+          <div class="section-title"><div><span>01</span><div><h2>Grunddaten</h2><p>Name, URL und sichtbares Branding</p></div></div><label class="publish-toggle"><input name="isPublished" type="checkbox"><span></span>Veröffentlicht</label></div>
+          <div class="form-grid four">
+            <label>Case-Name<input name="title" required maxlength="120"></label>
+            <label>URL-Slug<input name="slug" required maxlength="80" pattern="[a-z0-9]+(?:-[a-z0-9]+)*"></label>
+            <label>Kundenname<input name="clientName" required maxlength="120"></label>
+            <label>Primärfarbe<input name="primaryColor" type="color" value="#e7352e"></label>
+          </div>
+        </section>
+
+        <section class="panel section">
+          <div class="section-title"><div><span>02</span><div><h2>Objekte</h2><p>Portfolio-Fakten für Reporting und Prediction Engine</p></div></div></div>
+          <div id="propertyRows" class="property-grid"></div>
+        </section>
+
+        <section class="panel section">
+          <div class="section-title"><div><span>03</span><div><h2>Kampagnen</h2><p>Gesamtwerte werden automatisch konsistent auf Tage, Creatives und Zielgruppen verteilt</p></div></div></div>
+          <div class="table-wrap">
+            <table class="campaign-table">
+              <thead><tr><th>Kampagne</th><th>Status</th><th>Spend</th><th>Leads</th><th>Impressionen</th><th>Klicks</th></tr></thead>
+              <tbody id="campaignRows"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="danger-zone">
+          <div><strong>Case löschen</strong><p>Der Case und sein öffentlicher Link werden dauerhaft entfernt.</p></div>
+          <button id="deleteCase" class="button danger" type="button">Löschen</button>
+        </section>
+      </form>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+  <script src="backend-config.js"></script>
+  <script src="shared/case-model.js"></script>
+  <script src="shared/supabase-api.js"></script>
+  <script src="client/demo-payload.js"></script>
+  <script src="editor-app.js"></script>
+</body>
+</html>
