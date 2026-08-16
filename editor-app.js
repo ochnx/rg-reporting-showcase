@@ -19,11 +19,6 @@
   function clone(value) { return JSON.parse(JSON.stringify(value)); }
   function number(value) { return Number(value || 0); }
   function money(value) { return Math.round(number(value) * 100) / 100; }
-  function isStrongPassword(password) {
-    return String(password || '').length >= 12 &&
-      /[a-z]/.test(password) && /[A-Z]/.test(password) && /\d/.test(password) &&
-      /[!@#$%^&*()_+\-=\[\]{};'\\:"|<>?,.\/`~]/.test(password);
-  }
 
   function notify(message) {
     var toast = document.getElementById('toast');
@@ -37,31 +32,6 @@
     document.querySelectorAll('button').forEach(function (button) { button.disabled = busy; });
   }
 
-  function showLoginError(message) {
-    var error = document.getElementById('loginError');
-    error.textContent = message || '';
-    error.classList.toggle('show', Boolean(message));
-  }
-
-  function showWorkspace() {
-    document.getElementById('loginView').hidden = true;
-    document.getElementById('inviteView').hidden = true;
-    document.getElementById('workspace').hidden = false;
-    var session = api.getSession();
-    document.getElementById('accountLabel').textContent = session && session.user ? session.user.email || '' : '';
-  }
-
-  function showLogin() {
-    document.getElementById('workspace').hidden = true;
-    document.getElementById('inviteView').hidden = true;
-    document.getElementById('loginView').hidden = false;
-  }
-
-  function showInvite() {
-    document.getElementById('workspace').hidden = true;
-    document.getElementById('loginView').hidden = true;
-    document.getElementById('inviteView').hidden = false;
-  }
 
   function makeNewCase() {
     var suffix = String(Date.now()).slice(-5);
@@ -187,44 +157,6 @@
     });
   }
 
-  document.getElementById('loginForm').addEventListener('submit', async function (event) {
-    event.preventDefault();
-    showLoginError('');
-    setBusy(true);
-    try {
-      await api.signIn(event.target.elements.email.value.trim(), event.target.elements.password.value);
-      event.target.elements.password.value = '';
-      showWorkspace();
-      await loadCases();
-    } catch (error) {
-      showLoginError(error.message);
-    } finally { setBusy(false); }
-  });
-
-  document.getElementById('inviteForm').addEventListener('submit', async function (event) {
-    event.preventDefault();
-    var password = event.target.elements.password.value;
-    var confirmation = event.target.elements.passwordConfirm.value;
-    var errorElement = document.getElementById('inviteError');
-    errorElement.textContent = '';
-    errorElement.classList.remove('show');
-    if (!isStrongPassword(password) || password !== confirmation) {
-      errorElement.textContent = !isStrongPassword(password) ? 'Mindestens 12 Zeichen mit Groß- und Kleinbuchstaben, Zahl und Sonderzeichen.' : 'Die Passwörter stimmen nicht überein.';
-      errorElement.classList.add('show');
-      return;
-    }
-    setBusy(true);
-    try {
-      await api.updatePassword(password);
-      event.target.reset();
-      showWorkspace();
-      await loadCases();
-      notify('Account aktiviert');
-    } catch (error) {
-      errorElement.textContent = error.message;
-      errorElement.classList.add('show');
-    } finally { setBusy(false); }
-  });
 
   form.addEventListener('submit', async function (event) {
     event.preventDefault();
@@ -264,10 +196,7 @@
   document.getElementById('openViewer').addEventListener('click', function () {
     if (current && current.is_published) window.open('client/?case=' + encodeURIComponent(current.slug), '_blank', 'noopener');
   });
-  document.getElementById('logoutButton').addEventListener('click', async function () {
-    try { await api.signOut(); } catch (_) { /* local session is cleared in finally */ }
-    cases = []; current = null; showLogin();
-  });
+
   form.elements.title.addEventListener('input', function () {
     if (!current.id) form.elements.slug.value = model.slugify(form.elements.title.value);
     document.getElementById('editorTitle').textContent = form.elements.title.value || 'Neuer Case';
@@ -275,20 +204,11 @@
 
   async function init() {
     if (!config.url || !config.key) {
-      showLogin();
-      showLoginError('Backend ist noch nicht eingerichtet.');
+      notify('Backend ist noch nicht eingerichtet.');
       return;
     }
-    var invitation = api.consumeAuthHash(window.location.hash);
-    if (invitation) {
-      window.history.replaceState(null, '', window.location.pathname + window.location.search);
-      showInvite();
-      return;
-    }
-    if (!api.getSession()) { showLogin(); return; }
-    showWorkspace();
     try { await loadCases(); }
-    catch (error) { showLogin(); showLoginError(error.message); }
+    catch (error) { notify(error.message); }
   }
 
   init();

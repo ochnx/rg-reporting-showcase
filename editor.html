@@ -9,36 +9,10 @@
   <link rel="stylesheet" href="editor.css">
 </head>
 <body>
-  <section id="loginView" class="login-view">
-    <form id="loginForm" class="login-card">
-      <img src="assets/rg-logo.png" alt="Run & Gun">
-      <span class="eyebrow">Reporting Setup</span>
-      <h1>Cases einrichten</h1>
-      <p>Melde dich mit deinem freigeschalteten Account an.</p>
-      <label>E-Mail<input name="email" type="email" autocomplete="username" required></label>
-      <label>Passwort<input name="password" type="password" autocomplete="current-password" required></label>
-      <button class="button primary" type="submit">Anmelden</button>
-      <div id="loginError" class="message error" role="alert"></div>
-    </form>
-  </section>
-
-  <section id="inviteView" class="login-view" hidden>
-    <form id="inviteForm" class="login-card">
-      <img src="assets/rg-logo.png" alt="Run & Gun">
-      <span class="eyebrow">Account aktivieren</span>
-      <h1>Passwort festlegen</h1>
-      <p>Mindestens 12 Zeichen, Groß- und Kleinbuchstaben, Zahl und Sonderzeichen.</p>
-      <label>Neues Passwort<input id="invitePassword" name="password" type="password" autocomplete="new-password" minlength="12" required></label>
-      <label>Passwort wiederholen<input name="passwordConfirm" type="password" autocomplete="new-password" minlength="12" required></label>
-      <button class="button primary" type="submit">Account aktivieren</button>
-      <div id="inviteError" class="message error" role="alert"></div>
-    </form>
-  </section>
-
-  <div id="workspace" hidden>
+  <div id="workspace">
     <header class="topbar">
       <div class="brand"><img src="assets/rg-logo.png" alt="Run & Gun"><div><strong>Reporting Setup</strong><small>Synthetische Pitch-Cases</small></div></div>
-      <div class="top-actions"><span id="accountLabel"></span><button id="logoutButton" class="button ghost" type="button">Abmelden</button></div>
+      <div class="top-actions"><span>Offener Testzugang</span></div>
     </header>
 
     <main class="workspace">
